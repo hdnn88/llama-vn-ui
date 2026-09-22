@@ -50,17 +50,34 @@ def ollama_status():
 
 @app.route("/api/chat", methods=["POST"])
 def api_chat():
-    data = request.get_json(force=True)
+    data = request.get_json(silent=True)
+    if not isinstance(data, dict):
+        return jsonify({"error": "Body phải là JSON (Content-Type: application/json)"}), 415
     model = data.get("model", "")
     messages = data.get("messages", [])
-    if not model or not messages:
+    if not isinstance(model, str) or not model or not isinstance(messages, list) or not messages:
         return jsonify({"error": "Thiếu model hoặc messages"}), 400
+    if len(messages) > 200:
+        return jsonify({"error": "Quá nhiều messages (tối đa 200)"}), 400
+    clean = []
+    for m in messages:
+        if not isinstance(m, dict) or m.get("role") not in ("user", "assistant", "system"):
+            return jsonify({"error": "messages không hợp lệ"}), 400
+        content = m.get("content")
+        if not isinstance(content, str) or len(content) > 50000:
+            return jsonify({"error": "content không hợp lệ"}), 400
+        clean.append({"role": m["role"], "content": content})
+    try:
+        temp = float(data.get("temperature", 0.7))
+        temp = max(0.0, min(2.0, temp))
+    except (TypeError, ValueError):
+        temp = 0.7
 
     payload = {
         "model": model,
-        "messages": messages,
+        "messages": clean,
         "stream": False,
-        "options": {"temperature": data.get("temperature", 0.7)},
+        "options": {"temperature": temp},
     }
 
     start = time.time()
@@ -89,4 +106,4 @@ def api_chat():
 
 if __name__ == "__main__":
     print("🌐 llama-vn-ui: http://localhost:8000")
-    app.run(host="127.0.0.1", port=8000, debug=True)
+    app.run(host="127.0.0.1", port=8000, debug=False)
