@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>llama-vn-ui — Giao diện Ollama tiếng Việt</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>🦙 llama-vn-ui</h1>
+    <p>Web UI tiếng Việt cho Ollama — chạy local, riêng tư</p>
+  </header>
+
+  <main>
+    <section class="panel" id="sys-panel">
+      <h2>📊 Hệ thống</h2>
+      <div class="stat-grid">
+        <div class="stat"><span>RAM đã dùng</span><strong id="ram-used">…</strong></div>
+        <div class="stat"><span>RAM tổng</span><strong id="ram-total">…</strong></div>
+        <div class="stat"><span>CPU</span><strong id="cpu">…</strong></div>
+        <div class="stat"><span>Model</span><strong id="model-count">…</strong></div>
+      </div>
+      <div class="ram-bar"><div id="ram-bar-fill"></div></div>
+      <p id="ollama-status" class="muted"></p>
+    </section>
+
+    <section class="panel">
+      <h2>💬 Trò chuyện</h2>
+      <div class="controls">
+        <label for="model-select">Model:</label>
+        <select id="model-select"></select>
+      </div>
+      <div id="chat-box"></div>
+      <form id="chat-form">
+        <textarea id="prompt" rows="3" placeholder="Nhập câu hỏi tiếng Việt… (Enter gửi, Shift+Enter xuống dòng)"></textarea>
+        <button type="submit" id="send-btn">Gửi</button>
+      </form>
+      <p id="last-metrics" class="muted"></p>
+    </section>
+  </main>
+
+  <footer>
+    <p>MIT License · <a href="https://github.com" target="_blank">Đóng góp trên GitHub</a></p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
