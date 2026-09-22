@@ -21,7 +21,7 @@
 ## 🚀 Cài đặt
 
 ```bash
-git clone https://github.com/TEN-BAN/llama-vn-ui.git
+git clone https://github.com/hdnn88/llama-vn-ui.git
 cd llama-vn-ui
 pip install -r requirements.txt
 python app.py
